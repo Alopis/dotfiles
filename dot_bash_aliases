@@ -1,0 +1,162 @@
+#For use with the IOTstack repo
+if [ -f ~/.bash_aliases ]; then
+    . ~/IOTstack/.bash_aliases
+fi
+
+# Directory browsing
+# -----------------------------------------------------------------------------
+
+# Use exa as a modern 'ls'
+
+if command -v exa >/dev/null 2>&1; then
+    alias ls="exa --group-directories-first"
+
+    alias l="exa -Fhl --group-directories-first --git"  # show files in long format
+    alias la="exa -ha --group-directories-first"  # show all files
+    alias ll="exa -Fhla --group-directories-first --git"  # show all files in long format
+    alias ltree="exa -FThl --git"  # show all files in tree format
+
+    alias lad="exa -hd -- .*(/)"  # only show dot-directories
+    alias lsa="exa -ha -- .*(.)"  # only show dot-files
+    alias lsd="exa -FhlD"  # only show directories
+    alias lse="exa -Fhld -- *(/^F)"  # only show empty directories
+
+    alias lsnew="exa -rthl -- *(.) | tail \$@ 2>/dev/null"  # only the newest files
+    alias lsold="exa -rthl -- *(.) | head \$@ 2>/dev/null"   # display the oldest files
+    alias lssmall="exa -hl --sort=size -- *(.) | tail \$@ 2>/dev/null"  # display the smallest files
+    alias lsx="exa -l -- *(*) | head \$@ 2>/dev/null"        # only show executables
+    alias lssuid="exa -l -- *(s,S) | head \$@ 2>/dev/null"   # only show suid-files
+    alias lsbig="exa -hl --sort=size -- *(.) | grep -v total | head \$@ 2>/dev/null"    # display the biggest files
+else
+    # Detect which `ls` flavor is in use
+    if ls --color >/dev/null 2>&1; then # GNU `ls`
+        colorflag="--color"
+        export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
+    else # macOS `ls`
+        colorflag="-G"
+        export LSCOLORS='BxBxhxDxfxhxhxhxhxcxcx'
+    fi
+
+    alias ls="ls ${colorflag}"
+
+    alias l="ls -lF ${colorflag}"
+    alias la="ls -A ${colorflag}"
+    alias ll="ls -lAF ${colorflag}"
+
+    # List only directories
+    alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+fi
+
+# Displays drives and space in human readable format.
+alias df="df -h"
+
+
+# Get disk usage via ncdu, if installed
+if hash ncdu &> /dev/null; then
+  alias du="ncdu -rr -x --color dark --exclude .git --exclude node_modules"
+  alias sauron='sudo ncdu -rr -x --color dark --exclude .git --exclude node_modules /'
+else
+  # Prints disk usage per directory non-recursively, in human readable format.
+  alias du='du -h -d1'
+fi
+
+
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias cd..='cd ..'       # Common misspelling for going up one directory
+alias ..="cd .."         # Go up one directory
+alias ...='cd ../..'     # Go up two directories
+alias ....='cd ../../..' # Go up three directories
+alias -- -='cd -'        # Go back
+alias ~="cd ~"           # Go home
+alias h='cd $HOME && ls' # Go home and ls
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# diff
+alias diff='diff -u --color=auto'
+
+# git aliases
+alias g='git'
+alias gst='git status'
+alias gc='git commit'
+alias ga='git add'
+alias gpl='git pull'
+alias gpom='git pull origin master'
+alias gpu='git push'
+alias gch='git checkout'
+alias gnb='git checkout -b'
+alias gac='git add . && git commit'
+alias grs='git restore --staged .'
+alias gre='git restore'
+alias gr='git remote'
+alias gcl='git clone'
+alias glg="git log --graph --abbrev-commit --decorate --format=format:'%C(bold green)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold yellow)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+alias gt='git ls-tree -r master --name-only'
+alias grm='git remote'
+alias gb='git branch'
+alias gm='git merge'
+alias gf='git fetch'
+alias gri='git rebase --interactive'
+
+# Git Diff
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gdn='git diff --name-only'
+
+#Quick exits and clears
+alias q='exit'
+alias c='clear'
+alias k='clear'
+alias cls='clear'
+
+# Reload the shell (i.e. invoke as a login shell (-l))
+alias reload="exec -l ${SHELL}"
+
+# Safe ops. Ask the user before doing anything destructive.
+alias rmi="${aliases[rm]:-rm} -i"
+alias mvi="${aliases[mv]:-mv} -i"
+alias cpi="${aliases[cp]:-cp} -i"
+alias lni="${aliases[ln]:-ln} -i"
+
+# Quick chmod ;-)
+alias rw-='chmod 600'
+alias rwx='chmod 700'
+alias r--='chmod 644'
+alias r-x='chmod 755'
+
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+
+# File management
+# -----------------------------------------------------------------------------
+
+# Copies a file securely.
+alias cpv='rsync -ah --info=progress2'
+
+# Finds directories.
+alias fd='find . -type d -name'
+
+# Finds files.
+alias ff='find . -type f -name'
+
+
+# Get External IP / Internet Speed
+alias myip="curl http://ipecho.net/plain; echo"
+alias myipdetail="curl https://ipinfo.io/json" # or /ip for plain-text ip
+alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+
+# Get disk usage via ncdu, if installed
+if hash ncdu &> /dev/null; then
+  alias du="ncdu -rr -x --color dark --exclude .git --exclude node_modules"
+  alias sauron='sudo ncdu -rr -x --color dark --exclude .git --exclude node_modules /'
+fi
+
+#Fun parrot!!
+alias parrot="curl parrot.live"
+
+#Create a tar
+alias tar-make="tar -cvzf"
