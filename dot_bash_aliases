@@ -1,5 +1,5 @@
 #For use with the IOTstack repo
-if [ -f ~/.bash_aliases ]; then
+if [ -f ~/IOTstack/.bash_aliases ]; then
     . ~/IOTstack/.bash_aliases
 fi
 
