@@ -1,13 +1,7 @@
-#For use with the IOTstack repo
-if [ -f ~/IOTstack/.bash_aliases ]; then
-    . ~/IOTstack/.bash_aliases
-fi
-
-# Directory browsing
-# -----------------------------------------------------------------------------
+#### Navigation
+#### -----------------------------------------------------------------------------
 
 # Use exa as a modern 'ls'
-
 if command -v exa >/dev/null 2>&1; then
     alias ls="exa --group-directories-first"
 
@@ -47,20 +41,6 @@ else
     alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
 fi
 
-# Displays drives and space in human readable format.
-alias df="df -h"
-
-
-# Get disk usage via ncdu, if installed
-if hash ncdu &> /dev/null; then
-  alias du="ncdu -rr -x --color dark --exclude .git --exclude node_modules"
-  alias sauron='sudo ncdu -rr -x --color dark --exclude .git --exclude node_modules /'
-else
-  # Prints disk usage per directory non-recursively, in human readable format.
-  alias du='du -h -d1'
-fi
-
-
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias cd..='cd ..'       # Common misspelling for going up one directory
 alias ..="cd .."         # Go up one directory
@@ -70,16 +50,16 @@ alias -- -='cd -'        # Go back
 alias ~="cd ~"           # Go home
 alias h='cd $HOME && ls' # Go home and ls
 
-# Always enable colored `grep` output
-# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+#Quick exits and clears
+alias q='exit'
+alias c='clear'
+alias k='clear'
+alias cls='clear'
 
-# diff
-alias diff='diff -u --color=auto'
 
-# git aliases
+#### Git aliases
+#### -----------------------------------------------------------------------------
+
 alias g='git'
 alias gst='git status'
 alias gc='git commit'
@@ -107,14 +87,18 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gdn='git diff --name-only'
 
-#Quick exits and clears
-alias q='exit'
-alias c='clear'
-alias k='clear'
-alias cls='clear'
 
-# Reload the shell (i.e. invoke as a login shell (-l))
-alias reload="exec -l ${SHELL}"
+#### File and Directory management
+#### -----------------------------------------------------------------------------
+
+# Copies a file securely.
+alias cpv='rsync -ah --info=progress2'
+
+# Finds directories.
+alias fd='find . -type d -name'
+
+# Finds files.
+alias ff='find . -type f -name'
 
 # Safe ops. Ask the user before doing anything destructive.
 alias rmi="${aliases[rm]:-rm} -i"
@@ -128,26 +112,29 @@ alias rwx='chmod 700'
 alias r--='chmod 644'
 alias r-x='chmod 755'
 
-# Print each PATH entry on a separate line
-alias path='echo -e ${PATH//:/\\n}'
+#Create a tar
+alias tar-make="tar -cvzf"
 
-# File management
-# -----------------------------------------------------------------------------
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
-# Copies a file securely.
-alias cpv='rsync -ah --info=progress2'
+# Always enable colored `diff` output
+alias diff='diff -u --color=auto'
 
-# Finds directories.
-alias fd='find . -type d -name'
 
-# Finds files.
-alias ff='find . -type f -name'
-
+#### Informational
+#### -----------------------------------------------------------------------------
 
 # Get External IP / Internet Speed
 alias myip="curl http://ipecho.net/plain; echo"
 alias myipdetail="curl https://ipinfo.io/json" # or /ip for plain-text ip
 alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+
+# Displays drives and space in human readable format.
+alias df="df -h"
 
 # Get disk usage via ncdu, if installed
 if hash ncdu &> /dev/null; then
@@ -155,8 +142,28 @@ if hash ncdu &> /dev/null; then
   alias sauron='sudo ncdu -rr -x --color dark --exclude .git --exclude node_modules /'
 fi
 
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+
+
+#### External aliases
+#### -----------------------------------------------------------------------------
+
+#For use with the IOTstack repo
+if [ -f ~/IOTstack/.bash_aliases ]; then
+    . ~/IOTstack/.bash_aliases
+fi
+
+
+#### Shell Management
+#### -----------------------------------------------------------------------------
+
+# Reload the shell (i.e. invoke as a login shell (-l))
+alias reload="exec -l ${SHELL}"
+
+
+#### Fun things
+#### -----------------------------------------------------------------------------
+
 #Fun parrot!!
 alias parrot="curl parrot.live"
-
-#Create a tar
-alias tar-make="tar -cvzf"
