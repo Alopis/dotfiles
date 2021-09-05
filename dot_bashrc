@@ -114,3 +114,6 @@ fi
 
 ##  Add Nord dircolors
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
+
+EDITOR=$(which nano)
+eval "$(direnv hook bash)"

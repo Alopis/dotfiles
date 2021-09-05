@@ -88,6 +88,13 @@ alias gds='git diff --staged'
 alias gdn='git diff --name-only'
 
 
+#### Kubernetes aliases 
+#### -----------------------------------------------------------------------------
+
+alias k=kubectl
+
+
+
 #### File and Directory management
 #### -----------------------------------------------------------------------------
 
