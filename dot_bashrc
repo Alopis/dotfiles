@@ -117,3 +117,7 @@ test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
 EDITOR=$(which nano)
 eval "$(direnv hook bash)"
+
+if [ -x ~/.local/bin/bat || ~/bin/bat || /bin/batcat]; then
+    export MANPAGER="bat -l man -p"
+fi
