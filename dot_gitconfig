@@ -1,0 +1,6 @@
+[user]
+	email = kevins.mailinglists@gmail.com
+	name = Alopis
+
+[push]
+	default = current
